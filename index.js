@@ -1,5 +1,30 @@
-const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
+const program = require('commander');
+const {
+    getCollection
+} = require('./additional');
 
-mongoose.connect('mongodb://paito:newbase123@ds121652.mlab.com:21652/paito', { useNewUrlParser: true });
-const db = mongoose.connection;
+const { prompt } = require('inquirer');
+
+const questions = [
+    {
+        type: 'input',
+        name: 'collection',
+        message: 'Enter collection name'
+    }
+];
+
+program
+    .version('0.0.1')
+    .description('Mongoclone');
+
+program
+    .command('getCollection')
+    .alias('g')
+    .description('Get collection')
+    .action(() => {
+        prompt(questions).then(answers => {
+            getCollection(answers);
+        });
+    });
+
+program.parse(process.argv);
